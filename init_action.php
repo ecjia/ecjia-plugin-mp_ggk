@@ -112,14 +112,23 @@ class mp_ggk_init_action implements platform_interface {
     				$rs['level'] = '';
     			}
     			else{
-    				$rs['prize_type'] = 1;
-    				$rs['msg'] = $prize_name[$level];
-    				$rs['status'] = 1;
-    				$rs['level'] = $level;
+    			    if (empty($_SESSION['draw_level'])) {
+    			        $rs['prize_type'] = 1;
+    			        $rs['msg'] = $prize_name[$level];
+    			        $rs['status'] = 1;
+    			        $rs['level'] = $level;
+    			        $_SESSION['draw_level'] = $level;
+    			    } else {
+    			        $rs['prize_type'] = 1;
+    			        $rs['msg'] = $prize_name[$_SESSION['draw_level']];
+    			        $rs['status'] = 1;
+    			        $rs['level'] = $_SESSION['draw_level'];
+    			    }
     			}
     			$rs['num'] = $prize_num - $num > 0 ? $prize_num - $num : 0;
     		}
     	} elseif ($act == 'do') {
+    	        unset($_SESSION['draw_level']);
 	    		$prize_type = $_GET['prize_type'] ? $_GET['prize_type'] : 0;
 	    		$prize_name = $_GET['prize_name'] ? $_GET['prize_name'] : '';
 	    		$prize_level = $_GET['prize_level'] ? $_GET['prize_level'] : 'not';
