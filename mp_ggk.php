@@ -77,7 +77,12 @@ class plugin_mp_ggk {
     }
 }
 
+Ecjia_PluginManager::extend('mp_ggk', function() {
+    require_once RC_Plugin::plugin_dir_path(__FILE__) . 'mp_ggk.class.php';
+    return new mp_ggk();
+});
+
 RC_Plugin::register_activation_hook(__FILE__, array('plugin_mp_ggk', 'install'));
 RC_Plugin::register_deactivation_hook(__FILE__, array('plugin_mp_ggk', 'uninstall'));
-RC_Hook::add_filter('platform_factory_adapter_instance', array( 'plugin_mp_ggk', 'adapter_instance' ), 10, 2);
+// RC_Hook::add_filter('platform_factory_adapter_instance', array( 'plugin_mp_ggk', 'adapter_instance' ), 10, 2);
 // end
