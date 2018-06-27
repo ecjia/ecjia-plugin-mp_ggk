@@ -62,12 +62,12 @@ return array(
 		'3600'	=> '1小时',
 		'60'	=> '1分钟'
 	),
-	'prize_num' => '抽奖次数',
-	'starttime' => '开始时间',
-	'endtime' => '结束时间',
-	'list' => '奖品列表',
-	'description' => '活动规则',
-	'media_id' => '素材信息',
+	'prize_num' => '抽奖次数：',
+	'starttime' => '开始时间：',
+	'endtime' => '结束时间：',
+	'list' => '奖品列表：',
+	'description' => '活动规则：',
+	'media_id' => '素材信息：',
 	
 	'starttime_desc' => '请输入开始时间，例如：2016-01-12',
 	'endtime_desc' => '请输入结束时间，例如：2016-01-15',
