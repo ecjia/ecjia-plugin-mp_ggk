@@ -50,6 +50,7 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 use Ecjia\App\Platform\Plugin\PlatformAbstract;
+use Ecjia\App\Wechat\WechatRecord;
 
 class mp_ggk extends PlatformAbstract
 {    
