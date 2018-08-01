@@ -46,16 +46,18 @@
 //
 defined('IN_ECJIA') or exit('No permission resources.');
 return array(
-    'ext_code'      => 'mp_ggk',
-    
-    'ext_icon'      => 'images/icon_ggk.png',
+    'ext_code'              => 'mp_ggk',
 
-    'support_platform' => 'wechat', //仅支持微信公众平台
+    'ext_icon'              => 'images/icon_ggk.png',
+
+    'support_platform'      => 'wechat', //仅支持微信公众平台
 
     'support_platform_type' => ['service'], //仅支持微信服务号
-			
-	'forms' => array(
-	),
+
+    'support_type'          => Ecjia\App\Platform\Plugin\PlatformAbstract::TypeAdmin | Ecjia\App\Platform\Plugin\PlatformAbstract::TypeMerchant,
+
+    'forms' => array(
+    ),
 );
 
 // end
