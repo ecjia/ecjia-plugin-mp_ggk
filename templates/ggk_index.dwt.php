@@ -19,15 +19,30 @@
 				<div class="boxcontent boxwhite">
 					<div class="box">
 						<div class="title-brown">奖项设置</div>
-						<div class="Detail">
-	                        {if $prize}
-								<div class="content">
-									<!-- {foreach from=$prize item=val }-->
-									 <p>{$val.0}:{$val.1}(奖品数量：{$val.2})</p>
-								 	<!-- {/foreach} -->
-								</div>
-							{/if}
+                        {if $prize}
+                        <div class="Detail">
+                            <!-- {foreach from=$prize item=val }-->
+
+                            <p>
+                                {if $val.prize_level eq '0'}
+                                特等奖：
+                                {elseif $val.prize_level eq '1'}
+                                一等奖：
+                                {elseif $val.prize_level eq '2'}
+                                二等奖：
+                                {elseif $val.prize_level eq '3'}
+                                三等奖：
+                                {elseif $val.prize_level eq '4'}
+                                四等奖：
+                                {elseif $val.prize_level eq '5'}
+                                五等奖：
+                                {/if}
+                                {$val.prize_name}{if $val.prize_type eq '1' || $val.prize_type eq '3'}{$val.prize_value}(剩余奖品数量：{$val.prize_number}){/if}</p>
+                            <!-- {/foreach} -->
 						</div>
+                        {else}
+                        <p>暂无设置</p>
+                        {/if}
 					</div>
 				</div>
 				<div class="boxcontent boxwhite">
@@ -46,7 +61,7 @@
 							{if $list}
 								<div class="content">
 									 <!-- {foreach from=$list item=val}-->
-									  <p> {$val['nickname']} 获得奖品 ：{$val['prize_name']}</p>
+                                    <p> {$val.username} 获得奖品 ：{$val.prize_name}{if $val.prize_type eq '1' || $val.prize_type eq '3'}（{$val.prize_value}）{/if}</p>
 									 <!-- {/foreach} -->
 								</div>	 
 							{else}
@@ -66,7 +81,7 @@
 		
 <script type="text/javascript">
 $(function() {
-    // var ISWeixin = !!navigator.userAgent.match(/MicroMessenger/i); //wp手机无法判断
+	// var ISWeixin = !!navigator.userAgent.match(/MicroMessenger/i); //wp手机无法判断
     // if(!ISWeixin){
     //     var rd_url = location.href.split('#')[0];  // remove hash
     //     var oauth_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri='+encodeURIComponent(rd_url) + '&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect';
