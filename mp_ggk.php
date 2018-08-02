@@ -69,12 +69,6 @@ class plugin_mp_ggk {
         return RC_Api::api('platform', 'plugin_uninstall', $param);
     }
 
-
-    public static function adapter_instance($instance, $config) {
-        require_once RC_Plugin::plugin_dir_path(__FILE__) . 'mp_ggk.class.php';
-        $wechat = new mp_ggk($config);
-        return $wechat;
-    }
 }
 
 Ecjia_PluginManager::extend('mp_ggk', function() {
@@ -84,5 +78,4 @@ Ecjia_PluginManager::extend('mp_ggk', function() {
 
 RC_Plugin::register_activation_hook(__FILE__, array('plugin_mp_ggk', 'install'));
 RC_Plugin::register_deactivation_hook(__FILE__, array('plugin_mp_ggk', 'uninstall'));
-// RC_Hook::add_filter('platform_factory_adapter_instance', array( 'plugin_mp_ggk', 'adapter_instance' ), 10, 2);
 // end
