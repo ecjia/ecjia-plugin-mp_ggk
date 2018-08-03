@@ -371,7 +371,8 @@ class mp_ggk_init_action implements platform_interface {
         //奖品类型为红包或积分为中奖
         if (in_array($prize_info['prize_type'], array(2)) && !empty($id)) {
             // 获奖链接
-            $rs['link'] = RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/user', 'name' => 'mp_ggk', 'id' => $id,'openid' => $openid,'uuid' => $uuid));
+            //$rs['link'] = RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/user', 'name' => 'mp_ggk', 'id' => $id,'openid' => $openid,'uuid' => $uuid));
+        	$rs['link'] = RC_Uri::url('market/mobile_prize/prize_init', array('activity_id' => $market_activity['activity_id'], 'openid' => $openid,'uuid' => $uuid));
         }
 
     	echo json_encode($rs);
