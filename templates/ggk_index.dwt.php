@@ -76,7 +76,7 @@
     </div>
 
     <!-- 我的奖品 -->
-    <div style="margin: 0 auto;text-align:center">
+    <div class="container" style="margin: 0 auto;text-align:center">
         <a href="{$prize_url}"><img style="width: 50%;height: 50%" src="{$my_prize}" ></a>
     </div>
     <div style="margin-bottom: 10px"></div>
@@ -97,14 +97,13 @@
         // }
         var isLucky = false, level = "谢谢参与";
         $.getJSON('{$form_action}', { act:'draw' }, function(result){
-            console.log(result);
             if(result.status == 2){
                 $('#num').text(0);
                 $("#scratchpad").wScratchPad('enabled');
                 alert(result.msg);
                 return false;
             }
-            else if(result.status == 1 || result.status == 0){
+            else if(result.status == 1){
                 isLucky = true;
                 level = result.msg;
                 $("#prize").html(level);
@@ -132,11 +131,6 @@
                                     return false;
                                 }
                             }else if(data.status == 0){
-                                var msg = "恭喜中了" + result.msg + "\r\n" + "快去领奖吧";
-                                confirm(msg);
-                                    location.reload();
-                                    return false;
-                            }else {
                                 if(confirm(result.msg + "\r\n再来一次")){
                                     location.reload();
                                     return false;
