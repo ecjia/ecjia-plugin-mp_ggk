@@ -77,7 +77,7 @@
 
     <!-- 我的奖品 -->
     <div class="content" style="margin: 0 auto;text-align:center">
-        <a href="{$prize_url}"><img style="width: 50%" src="{$my_prize}" ></a>
+        <a href="{$prize_url}"><img width="50%" src="{$my_prize}" ></a>
     </div>
     <div style="margin-bottom: 10px"></div>
 </div>
