@@ -72,8 +72,6 @@ class mp_ggk_init implements platform_interface {
 
         $openid = trim($_GET['openid']);
         $uuid   = trim($_GET['uuid']);
-        $prize_url = RC_Uri::url('market/mobile_prize/prize_init', array('handle' => 'mp_zjd/init', 'openid' => $openid, 'uuid' => $uuid));
-        ecjia_front::$controller->assign('prize_url',$prize_url);
 
         $account        = platform_account::make($uuid);
         $wechat_id      = $account->getAccountID();
@@ -163,6 +161,8 @@ class mp_ggk_init implements platform_interface {
                 $list[] = $row;
             }
         }
+        $prize_url = RC_Uri::url('market/mobile_prize/prize_init', array('handle' => 'mp_ggk/init', 'openid' => $openid, 'uuid' => $uuid, 'activity_id' => $market_activity['activity_id']));
+        ecjia_front::$controller->assign('prize_url',$prize_url);
 
         ecjia_front::$controller->assign('form_action',RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/init_action', 'openid' => $openid, 'uuid' => $uuid, 'name' => 'mp_ggk')));
         ecjia_front::$controller->assign('prize',$prize_list);
