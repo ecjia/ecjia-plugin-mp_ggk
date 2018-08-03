@@ -49,16 +49,22 @@ class mp_ggk_init implements platform_interface {
     
     public function action() {
         $css_url = RC_Plugin::plugins_url('css/activity-style.css', __FILE__);
+        $css2_url = RC_Plugin::plugins_url('css/bootstrap.min.css', __FILE__);
         $jq_url = RC_Plugin::plugins_url('js/jquery.min.js', __FILE__);
     	$js_url = RC_Plugin::plugins_url('js/wScratchPad.js', __FILE__);
     	ecjia_front::$controller->assign('jq_url',$jq_url);
     	ecjia_front::$controller->assign('js_url',$js_url);
     	ecjia_front::$controller->assign('css_url',$css_url);
-    	
-    	$bannerbg= RC_Plugin::plugins_url('images/activity-scratch-card-bannerbg.png',__FILE__);
-    	ecjia_front::$controller->assign('bannerbg',$bannerbg);
-    	
-    	$tplpath = RC_Plugin::plugin_dir_path(__FILE__) . 'templates/ggk_index.dwt.php';
+        ecjia_front::$controller->assign('css2_url',$css2_url);
+
+
+        $bannerbg= RC_Plugin::plugins_url('images/activity-scratch-card-bannerbg.png',__FILE__);
+        $my_prize     = RC_Plugin::plugins_url('images/my_prize.png',__FILE__);
+        ecjia_front::$controller->assign('bannerbg',$bannerbg);
+        ecjia_front::$controller->assign('my_prize',$my_prize);
+
+
+        $tplpath = RC_Plugin::plugin_dir_path(__FILE__) . 'templates/ggk_index.dwt.php';
     	RC_Loader::load_app_class('platform_account', 'platform', false);
     	$platform_config_db = RC_Loader::load_app_model('platform_config_model','platform');
     	$wechat_prize_db = RC_Loader::load_app_model('wechat_prize_model','wechat');
@@ -66,6 +72,8 @@ class mp_ggk_init implements platform_interface {
 
         $openid = trim($_GET['openid']);
         $uuid   = trim($_GET['uuid']);
+        $prize_url = RC_Uri::url('market/mobile_prize/prize_init', array('handle' => 'mp_zjd/init', 'openid' => $openid, 'uuid' => $uuid));
+        ecjia_front::$controller->assign('prize_url',$prize_url);
 
         $account        = platform_account::make($uuid);
         $wechat_id      = $account->getAccountID();

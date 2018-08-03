@@ -7,6 +7,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>刮刮卡</title>
     <link rel="stylesheet" type="text/css" href="{$css_url}">
+    <link rel="stylesheet" type="text/css" href="{$css2_url}">
+
 </head>
 <body data-role="page" class="activity-scratch-card-winning">
 <div class="main">
@@ -72,7 +74,10 @@
             </div>
         </div>
     </div>
-    <div style="clear:both;">
+
+    <!-- 我的奖品 -->
+    <div style="margin: 0 auto;text-align:center">
+        <a href="{$prize_url}"><img src="{$my_prize}" ></a>
     </div>
 </div>
 
