@@ -37,7 +37,8 @@
                         {elseif $val.prize_level eq '5'}
                         五等奖：
                         {/if}
-                        {$val.prize_name}{if $val.prize_type eq '1' || $val.prize_type eq '3'}{$val.prize_value}(剩余奖品数量：{$val.prize_number}){/if}</p>
+                        {$val.prize_name}{if $val.prize_type eq '1' || $val.prize_type eq '3'}{$val.prize_value}(剩余奖品数量：{$val.prize_number}){/if}
+                    </p>
                     <!-- {/foreach} -->
                 </div>
                 {else}
@@ -49,7 +50,7 @@
             <div class="box">
                 <div class="title-brown">活动说明</div>
                 <div class="Detail">
-                    <p>剩余抽奖次数：<span id="num">{$prize_num}</span></p>
+                    <p>剩余抽奖次数：<span id="num">{if $prize_num lt 0} 0 {else} {$prize_num} {/if}</span></p>
                     <p>{$description}</p>
                 </div>
             </div>
@@ -90,8 +91,8 @@
         // }
         var isLucky = false, level = "谢谢参与";
         $.getJSON('{$form_action}', { act:'draw' }, function(result){
-            console.log(result);
             if(result.status == 2){
+                $('#num').text(0);
                 $("#scratchpad").wScratchPad('enabled');
                 alert(result.msg);
                 return false;

@@ -155,10 +155,8 @@ class mp_ggk_init implements platform_interface {
                 $list[] = $row;
             }
         }
-//        $form_action = RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/init_action', 'openid' => $openid, 'uuid' => $uuid, 'name' => 'mp_ggk'));
-//        _dump($form_action,1);
-        ecjia_front::$controller->assign('form_action',RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/init_action', 'openid' => $openid, 'uuid' => $uuid, 'name' => 'mp_ggk')));
 
+        ecjia_front::$controller->assign('form_action',RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/init_action', 'openid' => $openid, 'uuid' => $uuid, 'name' => 'mp_ggk')));
         ecjia_front::$controller->assign('prize',$prize_list);
         ecjia_front::$controller->assign('list',$list);
         ecjia_front::$controller->assign('prize_num',$prize_num);
