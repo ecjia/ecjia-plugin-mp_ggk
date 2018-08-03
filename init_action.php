@@ -332,7 +332,7 @@ class mp_ggk_init_action implements platform_interface {
             }
         }
 
-        if (in_array($prize_info['prize_type'], array(2))) {
+        if (in_array($prize_info['prize_type'], array(1,2,3,6))) {
             $rs['status'] = 1;
         } else {
             $rs['status'] = 0;
@@ -345,7 +345,7 @@ class mp_ggk_init_action implements platform_interface {
         }
 
         $name = RC_DB::table('wechat_user')->where('openid', $openid)->pluck('nickname');
-        if (in_array($prize_info['prize_type'], array(1,2,3))) {
+        if (in_array($prize_info['prize_type'], array(1,2,3,6))) {
             if ($prize_info['prize_type'] == 2) {
                 $issue_status = 0;
                 $issue_time = 0;
@@ -369,12 +369,12 @@ class mp_ggk_init_action implements platform_interface {
         }
 
         //奖品类型为红包或积分为中奖
-        if (in_array($prize_info['prize_type'], array(2)) && !empty($id)) {
+        if (in_array($prize_info['prize_type'], array(1,2,3,6)) && !empty($id)) {
             // 获奖链接
             //$rs['link'] = RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/user', 'name' => 'mp_ggk', 'id' => $id,'openid' => $openid,'uuid' => $uuid));
         	$rs['link'] = RC_Uri::url('market/mobile_prize/prize_init', array('activity_id' => $market_activity['activity_id'], 'openid' => $openid,'uuid' => $uuid));
         }
-
+		
     	echo json_encode($rs);
     	exit();
 	}
