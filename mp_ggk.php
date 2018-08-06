@@ -53,6 +53,7 @@ Version: 1.18.0
 Author URI: http://www.ecjia.com/
 Plugin App: platform
  */
+
 defined('IN_ECJIA') or exit('No permission resources.');
 
 class plugin_mp_ggk {
@@ -79,4 +80,5 @@ Ecjia_PluginManager::extend('mp_ggk', function () {
 
 RC_Plugin::register_activation_hook(__FILE__, array('plugin_mp_ggk', 'install'));
 RC_Plugin::register_deactivation_hook(__FILE__, array('plugin_mp_ggk', 'uninstall'));
+
 // end
