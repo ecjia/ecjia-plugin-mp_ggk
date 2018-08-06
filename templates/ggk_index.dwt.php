@@ -98,7 +98,7 @@
                     alert(result.message);
                     return false;
                 }
-                if (result.status == 'success') {
+                if (result.state == 'success') {
 //                     isLucky = true;
 //                     level = result.msg;
                     $("#prize").html(result.message);
@@ -121,7 +121,7 @@
 //                                 if (result.num >= 0) {
 //                                     $("#num").html(result.num);
 //                                 }
-                                if (data.status == 'success') {
+                                if (data.state == 'success') {
                                     var msg = "恭喜中了" + data.prize_name + "\r\n" +
                                         "快去领奖吧";
 									confirm(msg, function() {
@@ -132,8 +132,8 @@
                                         return false;
 									})
                                     
-                                } else if (data.status == 'error') {
-                                    alert(data.message + "\r\n再来一次", function() {
+                                } else if (data.state == 'error') {
+                                    alert(data.message, function() {
                                     	location.reload();
                                         return false;
 									})
