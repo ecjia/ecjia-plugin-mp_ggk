@@ -91,17 +91,17 @@
         $(function () {
             var isLucky = false,
                 level = "谢谢参与";
-            $.get('{$form_action}', function (result) {
+            $.get('{$form_action}', {'act': 'draw'}, function (result) {
                 if (result.state == 'error') {
                     $('#num').text(0);
                     $("#scratchpad").wScratchPad('enabled');
                     alert(result.message);
                     return false;
                 }
-                if (result.status == 1) {
-                    isLucky = true;
-                    level = result.msg;
-                    $("#prize").html(level);
+                if (result.status == 'success') {
+//                     isLucky = true;
+//                     level = result.msg;
+                    $("#prize").html(result.message);
                 }
                 $("#scratchpad").wScratchPad({
                     width: 220,
@@ -114,15 +114,15 @@
                             $("#scratchpad").wScratchPad('clear');
                             $.get('{$form_action}', {
                                 act: 'do',
-                                prize_type: result.prize_type,
-                                prize_name: result.msg,
-                                prize_level: result.level
+//                                 prize_type: result.prize_type,
+//                                 prize_name: result.msg,
+//                                 prize_level: result.level
                             }, function (data) {
-                                if (result.num >= 0) {
-                                    $("#num").html(result.num);
-                                }
-                                if (data.status == 1) {
-                                    var msg = "恭喜中了" + result.msg + "\r\n" +
+//                                 if (result.num >= 0) {
+//                                     $("#num").html(result.num);
+//                                 }
+                                if (data.status == 'success') {
+                                    var msg = "恭喜中了" + data.prize_name + "\r\n" +
                                         "快去领奖吧";
 									confirm(msg, function() {
 										location.href = data.link;
@@ -132,8 +132,8 @@
                                         return false;
 									})
                                     
-                                } else if (data.status == 0) {
-                                    alert(result.msg + "\r\n再来一次", function() {
+                                } else if (data.status == 'error') {
+                                    alert(data.message + "\r\n再来一次", function() {
                                     	location.reload();
                                         return false;
 									})
