@@ -77,32 +77,6 @@ class mp_ggk_init_action implements PluginPageInterface
     }
 
     /**
-     * 中奖概率计算
-     *
-     * @param unknown $proArr
-     * @return Ambigous <string, unknown>
-     */
-    private function get_rand($proArr)
-    {
-        $result = '';
-        // 概率数组的总概率精度
-        $proSum = array_sum($proArr);
-        // 概率数组循环
-        foreach ($proArr as $key => $proCur) {
-            $randNum = mt_rand(1, $proSum);
-            if ($randNum <= $proCur) {
-                $result = $key;
-                break;
-            } else {
-                $proSum -= $proCur;
-            }
-        }
-        unset($proArr);
-        return $result;
-    }
-
-
-    /**
      * 刮前获取奖品类
      */
     public function drawAction()
