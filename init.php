@@ -49,6 +49,27 @@ use Ecjia\App\Platform\Frameworks\Contracts\PluginPageInterface;
 
 class mp_ggk_init implements PluginPageInterface
 {
+
+    public function init()
+    {
+        //设置插件目录
+        $this->setPluginPath($this->__FILE__);
+
+        //设置插件资源URL
+        $this->assginPluginStyleUrl('jquery_js_url', 'js/jquery.min.js');
+        $this->assginPluginStyleUrl('wScratchPad_js_url', 'js/wScratchPad.js');
+
+        $this->assginPluginStyleUrl('bootstrap_css_url', 'css/bootstrap.min.css');
+        $this->assginPluginStyleUrl('activity_style_css_url', 'css/activity-style.css');
+
+        $this->assginPluginStyleUrl('bannerbg_img_url', 'images/activity-scratch-card-bannerbg.png');
+        $this->assginPluginStyleUrl('my_prize_img_url', 'images/my_prize.png');
+
+
+
+    }
+
+    
     public function action()
     {
         //js
