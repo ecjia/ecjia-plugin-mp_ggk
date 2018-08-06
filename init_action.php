@@ -163,8 +163,9 @@ class mp_ggk_init_action implements PluginPageInterface
                         'bonus_type_id' => $prize_info['prize_value'],
                         'user_id' => $user_id,
                     );
+                    RC_DB::table('user_bonus')->insert($data);
                 }
-                RC_DB::table('user_bonus')->insert($data);
+
             }
         } elseif ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_INTEGRAL) {
             /*减奖品数量*/
