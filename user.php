@@ -51,28 +51,26 @@ class mp_ggk_user implements PluginPageInterface
 {
     public function action()
     {
-        ecjia_front::$controller->assign('bootstrap_min_css', RC_Plugin::plugins_url('css/bootstrap.min.css', __FILE__));
-        ecjia_front::$controller->assign('bootstrap_min_js', RC_Plugin::plugins_url('js/bootstrap.min.js', __FILE__));
-        ecjia_front::$controller->assign('jquery_min_js', RC_Plugin::plugins_url('js/jquery.min.js', __FILE__));
-
-        $wechat_prize_db = RC_Loader::load_app_model('wechat_prize_model', 'wechat');
-
         $openid = trim($_GET['openid']);
         $uuid = trim($_GET['uuid']);
 
-        $name = '获奖用户资料';
-        $platform_account = with(new Ecjia\App\Platform\Frameworks\Platform\Account($uuid));
-        ecjia_front::$controller->assign('title', sprintf('%s - %s - %s', $name, $platform_account->getAccountName(), ecjia::config('shop_name')));
-
         if (!empty($_GET['id'])) {
             $id = intval($_GET['id']);
-            $rs = $wechat_prize_db->where(array('openid' => $openid, 'id' => $id))->get_field('winner');
+            $rs = RC_DB::table('wechat_prize')->where('openid', $openid)->where('id', $id)->pluck('winner');
             if (!empty($rs)) {
                 ecjia_front::$controller->showmessage('已经领取', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             ecjia_front::$controller->assign('id', $id);
             ecjia_front::$controller->assign_lang();
-
+            
+            ecjia_front::$controller->assign('bootstrap_min_css', RC_Plugin::plugins_url('css/bootstrap.min.css', __FILE__));
+            ecjia_front::$controller->assign('bootstrap_min_js', RC_Plugin::plugins_url('js/bootstrap.min.js', __FILE__));
+            ecjia_front::$controller->assign('jquery_min_js', RC_Plugin::plugins_url('js/jquery.min.js', __FILE__));
+            
+            $name = '获奖用户资料';
+            $platform_account = with(new Ecjia\App\Platform\Frameworks\Platform\Account($uuid));
+            ecjia_front::$controller->assign('title', sprintf('%s - %s - %s', $name, $platform_account->getAccountName(), ecjia::config('shop_name')));
+            
             $tplpath = RC_Plugin::plugin_dir_path(__FILE__) . 'templates/ggk_user_info.dwt.php';
             ecjia_front::$controller->display($tplpath);
         }
@@ -93,7 +91,7 @@ class mp_ggk_user implements PluginPageInterface
                 ecjia_front::$controller->showmessage('请填写详细地址', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             $winner['winner'] = serialize($data);
-            $wechat_prize_db->where(array('id' => $id))->update($winner);
+            RC_DB::table('wechat_prize')->where('id', $id)->update($winner);
 
             ecjia_front::$controller->showmessage('资料提交成功，请等待发放奖品,可以刮奖哦', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/init', 'openid' => $openid, 'uuid' => $uuid))));
         }
