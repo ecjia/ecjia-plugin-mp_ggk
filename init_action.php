@@ -53,6 +53,7 @@ class mp_ggk_init_action implements PluginPageInterface
     {
         $openid = trim($_GET['openid']);
         $uuid = trim($_GET['uuid']);
+        $act = trim($_GET['act']);
         $ks = trim($_GET['name']);
 
         $platform_account = with(new Ecjia\App\Platform\Frameworks\Platform\Account($uuid));
