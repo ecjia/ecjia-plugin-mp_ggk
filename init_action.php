@@ -206,11 +206,11 @@ class mp_ggk_init_action implements PluginPageInterface
             return ecjia_front::$controller->showmessage('很遗憾，再接再励！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        //发奖环节
-        $MarketActivity->issuePrize($openid);
-
         //记录中奖记录
-        $MarketActivity->addLotteryPrizeLog($openid);
+        $logid = $MarketActivity->addLotteryPrizeLog($openid, $prize_info);
+
+        //发奖环节
+        $MarketActivity->issuePrize($wechat_id, $openid, $prize_info, $logid);
 
         //中奖名称
         $rs['prize_name'] = $prize_info->prize_name;
