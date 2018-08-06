@@ -173,7 +173,7 @@ class mp_ggk_init_action implements PluginPageInterface
             if (!empty($user_id)) {
                 $options = array(
                     'user_id' => $user_id,
-                    'pay_points' => intval($prize_info['prize_value']),
+                    'point' => intval($prize_info['prize_value']),
                     'change_desc' => '微信营销活动参与赠送',
                 );
                 //RC_Api::api('user', 'account_change_log', $options);
