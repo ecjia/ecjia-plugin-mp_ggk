@@ -151,7 +151,7 @@ class mp_ggk_init_action implements PluginPageInterface
         }
 
         $user_id = RC_DB::table('connect_user')->where('connect_code', 'sns_wechat')->where('open_id', $openid)->pluck('user_id');
-        if ($prize_info['prize_type'] == '1') {
+        if ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_BONUS) {
             $bonus_info = RC_DB::table('bonus_type')->where('type_id', $prize_info['prize_value'])->first();
             if ($bonus_info['send_start_date'] <= $time && $bonus_info['send_end_date'] >= $time) {
                 /*减奖品数量*/
@@ -165,7 +165,7 @@ class mp_ggk_init_action implements PluginPageInterface
                 }
                 RC_DB::table('user_bonus')->insert($data);
             }
-        } elseif ($prize_info['prize_type'] == '3') {
+        } elseif ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_INTEGRAL) {
             /*减奖品数量*/
             RC_DB::table('market_activity_prize')->where('prize_id', $prize_info['prize_id'])->decrement('prize_number');
             /*发放奖品至用户，赠送积分给用户*/
@@ -175,11 +175,27 @@ class mp_ggk_init_action implements PluginPageInterface
                     'pay_points' => intval($prize_info['prize_value']),
                     'change_desc' => '微信营销活动参与赠送',
                 );
-                RC_Api::api('user', 'account_change_log', $options);
+                //RC_Api::api('user', 'account_change_log', $options);
+                RC_Api::api('finance', 'pay_points_change',$options);
             }
-        }
-
-        if (in_array($prize_info['prize_type'], array(1, 2, 3, 6))) {
+        }elseif ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_BALANCE) {
+    		/*减奖品数量*/
+    		RC_DB::table('market_activity_prize')->where('prize_id', $prize_info['prize_id'])->decrement('prize_number');
+    		//发放现金红包，更新用户账户余额
+    		$options = array(
+    				'user_id'		=> $openid,
+    				'user_money'	=> intval($prize_info['prize_value']),
+    				'change_desc'	=> '微信营销活动参与赠送'
+    		);
+    		RC_Api::api('user', 'account_change_log',$options);
+    	}
+    	$prize_type = array(
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_BONUS,
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_REAL,
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_INTEGRAL,
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_BALANCE
+    	);
+        if (in_array($prize_info['prize_type'], $prize_type)) {
             $rs['status'] = 1;
         } else {
             $rs['status'] = 0;
@@ -190,9 +206,9 @@ class mp_ggk_init_action implements PluginPageInterface
         } else {
             $rs['num'] = $unused_num;
         }
-
+		
         $name = RC_DB::table('wechat_user')->where('openid', $openid)->pluck('nickname');
-        if (in_array($prize_info['prize_type'], array(1, 2, 3, 6))) {
+        if (in_array($prize_info['prize_type'], $prize_type)) {
             if ($prize_info['prize_type'] == 2) {
                 $issue_status = 0;
                 $issue_time = 0;
@@ -216,7 +232,7 @@ class mp_ggk_init_action implements PluginPageInterface
         }
 
         //奖品类型为红包或积分为中奖
-        if (in_array($prize_info['prize_type'], array(1, 2, 3, 6)) && !empty($id)) {
+        if (in_array($prize_info['prize_type'], $prize_type) && !empty($id)) {
             // 获奖链接
             //$rs['link'] = RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/user', 'name' => 'mp_ggk', 'id' => $id,'openid' => $openid,'uuid' => $uuid));
             $rs['link'] = RC_Uri::url('market/mobile_prize/prize_init', array('activity_id' => $market_activity['activity_id'], 'openid' => $openid, 'uuid' => $uuid));
