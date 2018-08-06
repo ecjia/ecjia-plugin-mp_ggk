@@ -65,8 +65,6 @@ class mp_ggk_init implements PluginPageInterface
         $this->assginPluginStyleUrl('bannerbg_img_url', 'images/activity-scratch-card-bannerbg.png');
         $this->assginPluginStyleUrl('my_prize_img_url', 'images/my_prize.png');
 
-
-
     }
 
     
@@ -75,11 +73,13 @@ class mp_ggk_init implements PluginPageInterface
         //js
         ecjia_front::$controller->assign('jquery_min_js', RC_Plugin::plugins_url('js/jquery.min.js', __FILE__));
         ecjia_front::$controller->assign('wScratchPad_js', RC_Plugin::plugins_url('js/wScratchPad.js', __FILE__));
-
+        ecjia_front::$controller->assign('framework7_min_js', RC_Plugin::plugins_url('js/framework7.min.js', __FILE__));
+        
         //css
         ecjia_front::$controller->assign('activity_style_css', RC_Plugin::plugins_url('css/activity-style.css', __FILE__));
         ecjia_front::$controller->assign('bootstrap_min_css', RC_Plugin::plugins_url('css/bootstrap.min.css', __FILE__));
-
+        ecjia_front::$controller->assign('models_css', RC_Plugin::plugins_url('css/models.css', __FILE__));
+        
         //image
         ecjia_front::$controller->assign('bannerbg_png', RC_Plugin::plugins_url('images/activity-scratch-card-bannerbg.png', __FILE__));
         ecjia_front::$controller->assign('my_prize_png', RC_Plugin::plugins_url('images/my_prize.png', __FILE__));

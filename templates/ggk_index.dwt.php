@@ -10,6 +10,7 @@
     <title>{$title}</title>
     <link rel="stylesheet" type="text/css" href="{$activity_style_css}">
     <link rel="stylesheet" type="text/css" href="{$bootstrap_min_css}">
+    <link rel="stylesheet" type="text/css" href="{$models_css}">
 </head>
 
 <body data-role="page" class="activity-scratch-card-winning">
@@ -77,7 +78,8 @@
 
     <script type="text/javascript" src="{$jquery_min_js}"></script>
     <script type="text/javascript" src="{$wScratchPad_js}"></script>
-
+    <script type="text/javascript" src="{$framework7_min_js}"></script>
+    
     <script type="text/javascript">
         $(function () {
             var isLucky = false,
@@ -96,7 +98,7 @@
                     $("#prize").html(level);
                 }
                 $("#scratchpad").wScratchPad({
-                    width: 150,
+                    width: 220,
                     height: 60,
                     color: "#a9a9a7", //覆盖的刮刮层的颜色
                     scratchDown: function (e, percent) {
@@ -116,24 +118,41 @@
                                 if (data.status == 1) {
                                     var msg = "恭喜中了" + result.msg + "\r\n" +
                                         "快去领奖吧";
-                                    if (data.link && confirm(msg)) {
-                                        location.href = data.link;
+									confirm(msg, function() {
+										location.href = data.link;
                                         return false;
-                                    } else {
-                                        location.reload();
+									}, function() {
+										location.reload();
                                         return false;
-                                    }
+									})
+                                    
                                 } else if (data.status == 0) {
-                                    if (confirm(result.msg + "\r\n再来一次")) {
-                                        location.reload();
+                                    alert(result.msg + "\r\n再来一次", function() {
+                                    	location.reload();
                                         return false;
-                                    }
+									})
                                 }
                             });
                         }
                     }
                 });
             });
+            function alert(text, callback) {
+                var app = new Framework7({
+                    modalButtonOk: "确定",
+                    modalTitle: ''
+                });
+                app.alert(text, '', callback);
+            }
+
+            function confirm(text, callbackOk, callbackCancel) {
+                var app = new Framework7({
+                    modalButtonOk: "确定",
+                    modalTitle: '',
+                    modalButtonCancel: '取消'
+                });
+                app.confirm(text, '', callbackOk, callbackCancel);
+            }
         });
     </script>
 </body>

@@ -62,6 +62,7 @@ td {
 .activity-scratch-card-winning {
 	background: #672600;
 	overflow-x: hidden;
+	position: relative;
 }
 
 .activity-scratch-card-end {
