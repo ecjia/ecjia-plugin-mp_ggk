@@ -42,7 +42,7 @@
                         <!-- {/foreach} -->
                     </div>
                     {else}
-                    <p>暂无设置</p>
+                    <p class="Detail">暂无设置</p>
                     {/if}
                 </div>
             </div>
@@ -91,9 +91,7 @@
         $(function () {
             var isLucky = false,
                 level = "谢谢参与";
-            $.get('{$form_action}', {
-                act: 'draw'
-            }, function (result) {
+            $.get('{$form_action}', function (result) {
                 if (result.state == 'error') {
                     $('#num').text(0);
                     $("#scratchpad").wScratchPad('enabled');
