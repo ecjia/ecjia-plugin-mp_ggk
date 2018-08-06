@@ -120,7 +120,7 @@ class mp_ggk_init implements platform_interface {
                 $time_limit = $time - $market_activity['limit_time']*60;
                 $db_market_activity_lottery->where('update_time', '<=', $time)->where('add_time', '>=', $time_limit);
             }
-            $market_activity_lottery_info = RC_DB::table('market_activity_lottery')->where('activity_id', $market_activity['activity_id'])->where('user_id', $openid)->first();
+            $market_activity_lottery_info = $db_market_activity_lottery->where('activity_id', $market_activity['activity_id'])->where('user_id', $openid)->first();
 
             $limit_count = $market_activity_lottery_info['lottery_num'];
             //限定时间已抽取的次数

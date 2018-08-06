@@ -216,19 +216,17 @@ class mp_ggk_init_action implements platform_interface {
         }
         // 超过次数
         if ($market_activity['limit_num'] > 0) {
-            //$db_activity_log = RC_DB::table('market_activity_log');
-            //$db_activity_log->where('activity_id', $market_activity['activity_id'])->where('user_id', $openid);//openid
             $db_market_activity_lottery = RC_DB::table('market_activity_lottery');
             if ($market_activity['limit_time'] > 0) {
-                $time_limit = $time - $market_activity['limit_time']*60*60;
+                $time_limit = $time - $market_activity['limit_time']*60;
                 $db_market_activity_lottery->where('update_time', '<=', $time)->where('add_time', '>=', $time_limit);
             }
-            $market_activity_lottery_info = RC_DB::table('market_activity_lottery')->where('activity_id', $market_activity['activity_id'])->where('user_id', $openid)->first();
+            $market_activity_lottery_info = $db_market_activity_lottery->where('activity_id', $market_activity['activity_id'])->where('user_id', $openid)->first();
 
             $limit_count = $market_activity_lottery_info['lottery_num'];
 
             //当前时间 -上次抽奖添加时间大于限制时间时；重置抽奖时间和抽奖次数；
-            if ($time - $market_activity_lottery_info['add_time'] >= $market_activity['limit_time']*60*60) {
+            if ($time - $market_activity_lottery_info['add_time'] >= $market_activity['limit_time']*60) {
                 RC_DB::table('market_activity_lottery')
                     ->where('activity_id', $market_activity['activity_id'])
                     ->where('user_id', $_SESSION['user_id'])
