@@ -82,17 +82,22 @@ class mp_ggk_init_action implements PluginPageInterface
         if ($time > $endtime) {
             return ecjia_front::$controller->showmessage('刮刮卡活动已经结束', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
-
         // 超过次数
         if ($market_activity['limit_num'] > 0) {
             $db_market_activity_lottery = RC_DB::table('market_activity_lottery');
             if ($market_activity['limit_time'] > 0) {
-                $time_limit = $time - $market_activity['limit_time'] * 60;
+                $time_limit = $time - $market_activity['limit_time']*60;
                 $db_market_activity_lottery->where('update_time', '<=', $time)->where('add_time', '>=', $time_limit);
             }
             $market_activity_lottery_info = $db_market_activity_lottery->where('activity_id', $market_activity['activity_id'])->where('user_id', $openid)->first();
             $limit_count = $market_activity_lottery_info['lottery_num'];
-
+            //当前时间 -上次抽奖添加时间大于限制时间时；重置抽奖时间和抽奖次数；
+            if ($time - $market_activity_lottery_info['add_time'] >= $market_activity['limit_time'] * 60) {
+                RC_DB::table('market_activity_lottery')
+                    ->where('activity_id', $market_activity['activity_id'])
+                    ->where('user_id', $_SESSION['user_id'])
+                    ->update(array('add_time' => $time, 'update_time' => $time, 'lottery_num' => 1));
+            }
             //限定时间已抽取的次数
             $has_used_count = $limit_count;
             $unused_num = $market_activity['limit_num'] - $has_used_count; //剩余可抽取的次数
@@ -100,14 +105,6 @@ class mp_ggk_init_action implements PluginPageInterface
             if ($unused_num <= 0) {
                 return ecjia_front::$controller->showmessage('活动次数太频繁，请稍后再来！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             } else {
-                //当前时间 -上次抽奖添加时间大于限制时间时；重置抽奖时间和抽奖次数；
-                if ($time - $market_activity_lottery_info['add_time'] >= $market_activity['limit_time'] * 60) {
-                    RC_DB::table('market_activity_lottery')
-                        ->where('activity_id', $market_activity['activity_id'])
-                        ->where('user_id', $openid)
-                        ->update(array('add_time' => $time, 'update_time' => $time, 'lottery_num' => 1));
-                }
-
                 if (empty($market_activity_lottery_info)) {
                     //第一次参与抽奖此活动
                     $data = array(
@@ -133,7 +130,6 @@ class mp_ggk_init_action implements PluginPageInterface
             ->where('activity_id', $market_activity['activity_id'])
             ->where('prize_number', '>', 0)
             ->selectRaw('prize_id, activity_id, prize_level, prize_name, prize_type, prize_value, prize_number, prize_prob')->get();
-
         /*
          * 每次前端页面的请求，PHP循环奖项设置数组，
          * 通过概率计算函数get_rand获取抽中的奖项id。
@@ -147,69 +143,59 @@ class mp_ggk_init_action implements PluginPageInterface
                 $market_activity_prize_new[$v['prize_id']] = $v;
             }
         }
+
         $rid = $this->get_rand($prize_arr);
-
-        if (empty($act)) {
-            /* 获取中奖*/
-            $prize_info = $market_activity_prize_new[$rid];
-
-            $_SESSION['ggk_temp_data'] = $prize_info;
-        } else {
-            $prize_info = $_SESSION['ggk_temp_data'];
-        }
-
+        /* 获取中奖*/
+        $prize_info = $market_activity_prize_new[$rid];
         if (empty($prize_info)) {
-            return ecjia_front::$controller->showmessage('该活动为未设置奖品', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return ecjia_front::$controller->showmessage('很遗憾，未中奖！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        if (!empty($act)) {
-            $user_id = RC_DB::table('connect_user')->where('connect_code', 'sns_wechat')->where('open_id', $openid)->pluck('user_id');
-            if ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_BONUS) {
-                $bonus_info = RC_DB::table('bonus_type')->where('type_id', $prize_info['prize_value'])->first();
-                if ($bonus_info['send_start_date'] <= $time && $bonus_info['send_end_date'] >= $time) {
-                    /*减奖品数量*/
-                    RC_DB::table('market_activity_prize')->where('prize_id', $prize_info['prize_id'])->decrement('prize_number');
-                    /*发放奖品至用户，发放红包*/
-                    if (!empty($user_id)) {
-                        $data = array(
-                            'bonus_type_id' => $prize_info['prize_value'],
-                            'user_id' => $user_id,
-                        );
-                    }
-                    RC_DB::table('user_bonus')->insert($data);
-                }
-            } elseif ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_INTEGRAL) {
+        $user_id = RC_DB::table('connect_user')->where('connect_code', 'sns_wechat')->where('open_id', $openid)->pluck('user_id');
+        if ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_BONUS) {
+            $bonus_info = RC_DB::table('bonus_type')->where('type_id', $prize_info['prize_value'])->first();
+            if ($bonus_info['send_start_date'] <= $time && $bonus_info['send_end_date'] >= $time) {
                 /*减奖品数量*/
                 RC_DB::table('market_activity_prize')->where('prize_id', $prize_info['prize_id'])->decrement('prize_number');
-                /*发放奖品至用户，赠送积分给用户*/
+                /*发放奖品至用户，发放红包*/
                 if (!empty($user_id)) {
-                    $options = array(
+                    $data = array(
+                        'bonus_type_id' => $prize_info['prize_value'],
                         'user_id' => $user_id,
-                        'point' => intval($prize_info['prize_value']),
-                        'change_desc' => '微信营销活动参与赠送',
                     );
-                    //RC_Api::api('user', 'account_change_log', $options);
-                    RC_Api::api('finance', 'pay_points_change', $options);
                 }
-            } elseif ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_BALANCE) {
-                /*减奖品数量*/
-                RC_DB::table('market_activity_prize')->where('prize_id', $prize_info['prize_id'])->decrement('prize_number');
-                //发放现金红包，更新用户账户余额
+                RC_DB::table('user_bonus')->insert($data);
+            }
+        } elseif ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_INTEGRAL) {
+            /*减奖品数量*/
+            RC_DB::table('market_activity_prize')->where('prize_id', $prize_info['prize_id'])->decrement('prize_number');
+            /*发放奖品至用户，赠送积分给用户*/
+            if (!empty($user_id)) {
                 $options = array(
-                    'user_id' => $openid,
-                    'user_money' => intval($prize_info['prize_value']),
+                    'user_id' => $user_id,
+                    'point' => intval($prize_info['prize_value']),
                     'change_desc' => '微信营销活动参与赠送',
                 );
-                RC_Api::api('user', 'account_change_log', $options);
+                //RC_Api::api('user', 'account_change_log', $options);
+                RC_Api::api('finance', 'pay_points_change',$options);
             }
-        }
-        $prize_type = array(
-            Ecjia\App\Market\Prize\PrizeType::TYPE_BONUS,
-            Ecjia\App\Market\Prize\PrizeType::TYPE_REAL,
-            Ecjia\App\Market\Prize\PrizeType::TYPE_INTEGRAL,
-            Ecjia\App\Market\Prize\PrizeType::TYPE_BALANCE,
-        );
-
+        }elseif ($prize_info['prize_type'] == Ecjia\App\Market\Prize\PrizeType::TYPE_BALANCE) {
+    		/*减奖品数量*/
+    		RC_DB::table('market_activity_prize')->where('prize_id', $prize_info['prize_id'])->decrement('prize_number');
+    		//发放现金红包，更新用户账户余额
+    		$options = array(
+    				'user_id'		=> $openid,
+    				'user_money'	=> intval($prize_info['prize_value']),
+    				'change_desc'	=> '微信营销活动参与赠送'
+    		);
+    		RC_Api::api('user', 'account_change_log',$options);
+    	}
+    	$prize_type = array(
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_BONUS,
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_REAL,
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_INTEGRAL,
+    			Ecjia\App\Market\Prize\PrizeType::TYPE_BALANCE
+    	);
         if (in_array($prize_info['prize_type'], $prize_type)) {
             $rs['status'] = 1;
         } else {
@@ -221,7 +207,7 @@ class mp_ggk_init_action implements PluginPageInterface
         } else {
             $rs['num'] = $unused_num;
         }
-
+		
         $name = RC_DB::table('wechat_user')->where('openid', $openid)->pluck('nickname');
         if (in_array($prize_info['prize_type'], $prize_type)) {
             if ($prize_info['prize_type'] == 2) {
@@ -243,13 +229,13 @@ class mp_ggk_init_action implements PluginPageInterface
                 'issue_status' => $issue_status,
                 'issue_time' => $issue_time,
             );
-            if (!empty($act)) {
-                $id = RC_DB::table('market_activity_log')->insertGetId($data);
-            }
+            $id = RC_DB::table('market_activity_log')->insertGetId($data);
         }
+
         //奖品类型为红包或积分为中奖
         if (in_array($prize_info['prize_type'], $prize_type) && !empty($id)) {
             // 获奖链接
+            //$rs['link'] = RC_Uri::url('platform/plugin/show', array('handle' => 'mp_ggk/user', 'name' => 'mp_ggk', 'id' => $id,'openid' => $openid,'uuid' => $uuid));
             $rs['link'] = RC_Uri::url('market/mobile_prize/prize_init', array('activity_id' => $market_activity['activity_id'], 'openid' => $openid, 'uuid' => $uuid));
         }
         return ecjia_front::$controller->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, $rs);
