@@ -97,7 +97,7 @@
                 if (result.state == 'error') {
                     $('#num').text(0);
                     $("#scratchpad").wScratchPad('enabled');
-                    alert(result.message);
+                    alert(result.prize_name);
                     return false;
                 }
                 if (result.state == 'success') {
