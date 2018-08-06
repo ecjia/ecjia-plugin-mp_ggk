@@ -91,7 +91,9 @@
         $(function () {
             var isLucky = false,
                 level = "谢谢参与";
-            $.get('{$form_action}', {'act': 'draw'}, function (result) {
+            $.get('{$form_action}', {
+                	act: 'draw'
+                }, function (result) {
                 if (result.state == 'error') {
                     $('#num').text(0);
                     $("#scratchpad").wScratchPad('enabled');
