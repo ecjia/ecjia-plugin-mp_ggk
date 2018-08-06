@@ -54,9 +54,8 @@ Author URI: http://www.ecjia.com/
 Plugin App: platform
  */
 defined('IN_ECJIA') or exit('No permission resources.');
-class plugin_mp_ggk
-{
 
+class plugin_mp_ggk {
     public static function install()
     {
         $config = include RC_Plugin::plugin_dir_path(__FILE__) . 'config.php';

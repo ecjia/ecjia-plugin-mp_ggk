@@ -44,10 +44,11 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-RC_Loader::load_app_class('platform_interface', 'platform', false);
-class mp_ggk_init_action implements platform_interface
-{
 
+use Ecjia\App\Platform\Frameworks\Contracts\PluginPageInterface;
+
+class mp_ggk_init_action implements PluginPageInterface
+{
     public function action()
     {
         $openid = trim($_GET['openid']);
