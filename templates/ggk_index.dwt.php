@@ -89,21 +89,16 @@
     
     <script type="text/javascript">
         $(function () {
-            var isLucky = false,
-                level = "谢谢参与";
             $.get('{$form_action}', {
                 	act: 'draw'
                 }, function (result) {
                 if (result.state == 'error') {
-                    $('#num').text(0);
                     $("#scratchpad").wScratchPad('enabled');
-                    alert(result.prize_name);
+                    alert(result.message);
                     return false;
                 }
                 if (result.state == 'success') {
-//                     isLucky = true;
-//                     level = result.msg;
-                    $("#prize").html(result.message);
+                    $("#prize").html(result.prize_name);
                 }
                 $("#scratchpad").wScratchPad({
                     width: 220,
@@ -116,13 +111,7 @@
                             $("#scratchpad").wScratchPad('clear');
                             $.get('{$form_action}', {
                                 act: 'do',
-//                                 prize_type: result.prize_type,
-//                                 prize_name: result.msg,
-//                                 prize_level: result.level
                             }, function (data) {
-//                                 if (result.num >= 0) {
-//                                     $("#num").html(result.num);
-//                                 }
                                 if (data.state == 'success') {
                                     var msg = "恭喜中了" + data.prize_name + "\r\n" +
                                         "快去领奖吧";
@@ -133,7 +122,6 @@
 										location.reload();
                                         return false;
 									})
-                                    
                                 } else if (data.state == 'error') {
                                     alert(data.message, function() {
                                     	location.reload();
