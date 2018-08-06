@@ -92,9 +92,10 @@
                 if (result.state == 'error') {
                     $('#num').text(0);
                     $("#scratchpad").wScratchPad('enabled');
-                    alert(result.msg);
+                    alert(result.message);
                     return false;
-                } else if (result.state == 'success') {
+                }
+                if (result.status == 1) {
                     isLucky = true;
                     level = result.msg;
                     $("#prize").html(level);
