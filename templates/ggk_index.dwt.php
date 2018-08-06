@@ -16,9 +16,11 @@
 <body data-role="page" class="activity-scratch-card-winning">
     <div class="main">
         <div class="cover">
-            <img src="{$bannerbg_png}">
-            <div id="prize"></div>
-            <div id="scratchpad"></div>
+        	<div class="cover-content">
+	            <img src="{$bannerbg_png}">
+	            <div id="prize"></div>
+	            <div id="scratchpad"></div>
+            </div>
         </div>
         <div class="content">
             <div class="boxcontent boxwhite">
