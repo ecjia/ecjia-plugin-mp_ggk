@@ -94,7 +94,7 @@ class mp_ggk_init extends PluginPageController implements PluginPageInterface
         try {
             $MarketActivity = new Ecjia\App\Market\Prize\MarketActivity($code, $store_id, $wechat_id);
         } catch (Ecjia\App\Market\Exceptions\ActivityException $e) {
-            return ecjia_front::$controller->showmessage($e->getMessage(), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR);
+            return $this->showErrorMessage($e->getMessage());
         }
 
         $name = $MarketActivity->getActivityName();
