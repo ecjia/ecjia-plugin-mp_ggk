@@ -47,7 +47,6 @@
 
 use Ecjia\App\Platform\Frameworks\Contracts\PluginPageInterface;
 use Ecjia\App\Platform\Frameworks\Controller\PluginPageController;
-use Ecjia\App\Wechat\Authorize\WechatAuthorize;
 
 class mp_ggk_init extends PluginPageController implements PluginPageInterface
 {
@@ -71,7 +70,7 @@ class mp_ggk_init extends PluginPageController implements PluginPageInterface
 
         if (! ecjia_is_weixin()) {
             $uuid = trim($_GET['uuid']);
-            $url = with(new WechatAuthorize($uuid))->getAuthorizeUrl(RC_Uri::current_url());
+            $url = with(new Ecjia\App\Wechat\Authorize\WechatAuthorize($uuid))->getAuthorizeUrl(RC_Uri::current_url());
             $this->redirect($url);
         }
 
