@@ -91,7 +91,7 @@
     <script type="text/javascript">
         $(function () {
             var IsWeixin = !!navigator.userAgent.match(/MicroMessenger/i);
-            if(!IsWeixin){
+            if (!IsWeixin) {
                 var rd_url = location.href.split('#')[0];  // remove hash
                 var oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=" + encodeURIComponent(rd_url) + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
                 location.href = oauth_url;
