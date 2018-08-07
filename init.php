@@ -68,14 +68,12 @@ class mp_ggk_init extends PluginPageController implements PluginPageInterface
         $this->assginPluginStyleUrl('bannerbg_png', 'images/activity-scratch-card-bannerbg.png');
         $this->assginPluginStyleUrl('my_prize_png', 'images/my_prize.png');
 
-        if (! ecjia_is_weixin()) {
+        if (!ecjia_is_weixin()) {
             $uuid = trim($_GET['uuid']);
             $url = with(new Ecjia\App\Wechat\Authorize\WechatAuthorize($uuid))->getAuthorizeUrl(RC_Uri::current_url());
             $this->redirect($url);
         }
-
     }
-
     
     public function action()
     {
