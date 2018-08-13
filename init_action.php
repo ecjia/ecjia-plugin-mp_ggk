@@ -126,6 +126,9 @@ class mp_ggk_init_action implements PluginPageInterface
         $rs['status'] = Ecjia\App\Market\Prize\PrizeType::getPrizeStatus($prize_info->prize_type);
 
         $rs['prize_name'] = $prize_info['prize_name'];
+        if (empty($rs['prize_name'])) {
+            $rs['prize_name'] ='未中奖';
+        }
 
         RC_Session::set(self::SESSION_ID, $prize_info['prize_id']);
 
