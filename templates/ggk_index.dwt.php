@@ -45,7 +45,7 @@
                     <div class="title-brown">活动说明</div>
                     <div class="Detail">
                         <p>剩余抽奖次数：
-                            <span id="num">{if $prize_num lt 0} 0 {else} {$prize_num} {/if}</span>
+                            <span id="num"> {$prize_num} </span>
                         </p>
                         <p>{$description}</p>
                     </div>
