@@ -25,26 +25,26 @@
         <div class="content">
             <div class="boxcontent boxwhite">
                 <div class="box">
-                    <div class="title-brown">奖项设置</div>
+                    <div class="title-brown">{t domain="mp_ggk"}奖项设置{/t}</div>
                     {if $prize}
                     <div class="Detail">
                         <!-- {foreach from=$prize item=val }-->
                             <p>
-                                {if $val.prize_level eq '0'} 特等奖： {elseif $val.prize_level eq '1'} 一等奖： {elseif $val.prize_level eq '2'} 二等奖： {elseif $val.prize_level
-                                eq '3'} 三等奖： {elseif $val.prize_level eq '4'} 四等奖： {elseif $val.prize_level eq '5'} 五等奖： {/if} {$val.prize_name}{if $val.prize_type eq 2}（{$val.prize_value}）{/if}（剩余奖品数量：{$val.prize_number}）
+                                {if $val.prize_level eq '0'} {t domain="mp_ggk"}特等奖：{/t} {elseif $val.prize_level eq '1'} {t domain="mp_ggk"}一等奖：{/t} {elseif $val.prize_level eq '2'} {t domain="mp_ggk"}二等奖：{/t} {elseif $val.prize_level
+                                eq '3'} {t domain="mp_ggk"}三等奖：{/t} {elseif $val.prize_level eq '4'} {t domain="mp_ggk"}四等奖：{/t} {elseif $val.prize_level eq '5'} {t domain="mp_ggk"}五等奖：{/t} {/if} {$val.prize_name}{if $val.prize_type eq 2}（{$val.prize_value}）{/if}{t domain="mp_ggk" 1={$val.prize_number}}（剩余奖品数量：%1）{/t}
                             </p>
 	                        <!-- {/foreach} -->
                     </div>
                     {else}
-                    <p class="Detail">暂无设置</p>
+                    <p class="Detail">{t domain="mp_ggk"}暂无设置{/t}</p>
                     {/if}
                 </div>
             </div>
             <div class="boxcontent boxwhite">
                 <div class="box">
-                    <div class="title-brown">活动说明</div>
+                    <div class="title-brown">{t domain="mp_ggk"}活动说明{/t}</div>
                     <div class="Detail">
-                        <p>剩余抽奖次数：
+                        <p>{t domain="mp_ggk"}剩余抽奖次数：{/t}
                             <span id="num"> {$prize_num} </span>
                         </p>
                         <p>{$description}</p>
@@ -53,16 +53,16 @@
             </div>
             <div class="boxcontent boxwhite">
                 <div class="box">
-                    <div class="title-brown">中奖记录</div>
+                    <div class="title-brown">{t domain="mp_ggk"}中奖记录{/t}</div>
                     <div class="Detail">
                         {if $list}
                         <div class="content">
                             <!-- {foreach from=$list item=val}-->
-                            <p> {$val.user_name} 获得奖品 ：{$val.prize_name} {if $val.prize_type eq 2}（{$val.prize_value}）{/if}</p>
+                            <p> {$val.user_name} {t domain="mp_ggk"}获得奖品 ：{/t}{$val.prize_name} {if $val.prize_type eq 2}（{$val.prize_value}）{/if}</p>
                             <!-- {/foreach} -->
                         </div>
                         {else}
-                        <p>暂无获奖记录</p>
+                        <p>{t domain="mp_ggk"}暂无获奖记录{/t}</p>
                         {/if}
                     </div>
                 </div>
