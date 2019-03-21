@@ -75,6 +75,7 @@ class plugin_mp_ggk {
 }
 
 Ecjia_PluginManager::extend('mp_ggk', function () {
+    RC_Locale::loadPluginTextdomain('mp_ggk');
     require_once RC_Plugin::plugin_dir_path(__FILE__) . 'mp_ggk.class.php';
     return new mp_ggk();
 });
