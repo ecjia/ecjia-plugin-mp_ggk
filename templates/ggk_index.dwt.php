@@ -82,7 +82,7 @@
     
     <script type="text/javascript">
         $(function () {
-        	var js_lang = '{$js_lang}';
+        	var js_lang = {$js_lang};
         	
             $.get('{$form_action}', {
                 	act: 'draw'
