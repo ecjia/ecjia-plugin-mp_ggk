@@ -82,6 +82,8 @@
     
     <script type="text/javascript">
         $(function () {
+        	var js_lang = '{$js_lang}';
+        	
             $.get('{$form_action}', {
                 	act: 'draw'
                 }, function (result) {
@@ -106,8 +108,8 @@
                                 act: 'do',
                             }, function (data) {
                                 if (data.state == 'success') {
-                                    var msg = "恭喜中了" + data.prize_name + "\r\n" +
-                                        "快去领奖吧";
+                                    var msg = js_lang.congratulations + data.prize_name + "\r\n" +
+                                        js_lang.get_award;
 									confirm(msg, function() {
 										location.href = data.link;
                                         return false;
@@ -128,17 +130,17 @@
             });
             function alert(text, callback) {
                 var app = new Framework7({
-                    modalButtonOk: "确定",
-                    modalTitle: '提示'
+                    modalButtonOk: js_lang.ok,
+                    modalTitle: js_lang.tip
                 });
                 app.alert(text, '', callback);
             }
 
             function confirm(text, callbackOk, callbackCancel) {
                 var app = new Framework7({
-                    modalButtonOk: "去领奖",
-                    modalTitle: '中奖啦',
-                    modalButtonCancel: '稍后再领'
+                    modalButtonOk: js_lang.go_to_award,
+                    modalTitle: js_lang.winning,
+                    modalButtonCancel: js_lang.recollect_later
                 });
                 app.confirm(text, '', callbackOk, callbackCancel);
             }
